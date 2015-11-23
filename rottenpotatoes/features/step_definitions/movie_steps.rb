@@ -74,3 +74,13 @@ Then /I should see all the movies/ do
     fail unless movies_on_page.include?(cur_movie)
   end
 end
+Then /I should see the movies on the page sorted by (.*)/ do |order|
+  movies_on_page = []
+  page.all('table#movies tr').each do |tr|
+    next if tr.has_selector?('th')
+    title = tr.all('td')[0].text
+    rating = tr.all('td')[1].text
+    release_date = tr.all('td')[2].text
+    movies_on_page.push({title: title, rating: rating, release_date: release_date})
+  end
+end
