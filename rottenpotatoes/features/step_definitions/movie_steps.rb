@@ -83,4 +83,11 @@ Then /I should see the movies on the page sorted by (.*)/ do |order|
     release_date = tr.all('td')[2].text
     movies_on_page.push({title: title, rating: rating, release_date: release_date})
   end
+  case order
+  when 'title'
+    movies_on_page.each_cons(2).all? { |a, b| (a[:title] <=> b[:title]) < 0 }
+  when 'release_date'
+    movies_on_page.each_cons(2).all? { |a, b| (Date.parse(a[:release_date]) <=>Date.parse(b[:release_date])) < 0 }
+  else
+  end
 end
