@@ -62,5 +62,15 @@ end
 
 Then /I should see all the movies/ do
   # Make sure that all the movies in the app are visible in the table
-  fail "Unimplemented"
+  movies_on_page = []
+  page.all('table#movies tr').each do |tr|
+    next if tr.has_selector?('th')
+    title = tr.all('td')[0].text
+    rating = tr.all('td')[1].text
+    movies_on_page.push({title: title, rating: rating})
+  end
+  Movie.all.each do |movie|
+    cur_movie = {title: movie.title, rating: movie.rating}
+    fail unless movies_on_page.include?(cur_movie)
+  end
 end
